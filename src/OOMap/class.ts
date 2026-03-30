@@ -8,8 +8,9 @@ import type {
 import { isUuidV7 } from './isUuidV7/index.js'
 
 export class OOMap<T extends object> {
+  private readonly eventTarget = new EventTarget()
+  private readonly __state: OOMapState<T>
   private __live: T
-  private __state: OOMapState<T>
 
   constructor(defaults: { [K in keyof T]: T[K] }, snapshot?: OOMapSnapshot<T>) {
     this.__live = {} as T
@@ -57,9 +58,45 @@ export class OOMap<T extends object> {
       }
     }
   }
-
   get(key: keyof T): T[keyof T] {
     return this.__live[key]
   }
   set(key: keyof T, value: T[keyof T]): void {}
+  /**
+   * Registers an event listener.
+   *
+   * @param type - The event type to listen for.
+   * @param listener - The listener to register.
+   * @param options - Listener registration options.
+   */
+  addEventListener<K extends string>(
+    type: K,
+    listener: ORSetEventListenerFor<T, K> | null,
+    options?: boolean | AddEventListenerOptions
+  ): void {
+    this.eventTarget.addEventListener(
+      type,
+      listener as EventListenerOrEventListenerObject | null,
+      options
+    )
+  }
+
+  /**
+   * Removes an event listener.
+   *
+   * @param type - The event type to stop listening for.
+   * @param listener - The listener to remove.
+   * @param options - Listener removal options.
+   */
+  removeEventListener<K extends string>(
+    type: K,
+    listener: ORSetEventListenerFor<T, K> | null,
+    options?: boolean | EventListenerOptions
+  ): void {
+    this.eventTarget.removeEventListener(
+      type,
+      listener as EventListenerOrEventListenerObject | null,
+      options
+    )
+  }
 }
