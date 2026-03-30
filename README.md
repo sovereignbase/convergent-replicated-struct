@@ -1,11 +1,11 @@
-[![npm version](https://img.shields.io/npm/v/@sovereignbase/observed-remove-map)](https://www.npmjs.com/package/@sovereignbase/observed-remove-map)
-[![CI](https://github.com/sovereignbase/observed-remove-map/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/sovereignbase/observed-remove-map/actions/workflows/ci.yaml)
-[![codecov](https://codecov.io/gh/sovereignbase/observed-remove-map/branch/master/graph/badge.svg)](https://codecov.io/gh/sovereignbase/observed-remove-map)
-[![license](https://img.shields.io/npm/l/@sovereignbase/observed-remove-map)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/@sovereignbase/observed-overwrite-map)](https://www.npmjs.com/package/@sovereignbase/observed-overwrite-map)
+[![CI](https://github.com/sovereignbase/observed-overwrite-map/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/sovereignbase/observed-overwrite-map/actions/workflows/ci.yaml)
+[![codecov](https://codecov.io/gh/sovereignbase/observed-overwrite-map/branch/master/graph/badge.svg)](https://codecov.io/gh/sovereignbase/observed-overwrite-map)
+[![license](https://img.shields.io/npm/l/@sovereignbase/observed-overwrite-map)](LICENSE)
 
 1. Title
 
-# observed-remove-map
+# observed-overwrite-map
 
 2. Description
 

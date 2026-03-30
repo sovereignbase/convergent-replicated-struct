@@ -1,6 +1,6 @@
 {
   "$schema": "https://jsr.io/schema/config-file.v1.json",
-  "name": "@sovereignbase/observed-remove-map",
+  "name": "@sovereignbase/observed-overwritemap",
   "version": "0.0.0",
   "exports": "./src/index.ts",
   "publish": {
@@ -8,6 +8,7 @@
       "package.json",
       "src/**/*.ts",
       "src/.errors/**/*.ts",
+      "src/.types/**/*.ts",
       "src/.helpers/**/*.ts",
       "README.md",
       "LICENSE"
