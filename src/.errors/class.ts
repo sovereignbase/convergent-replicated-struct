@@ -1,12 +1,12 @@
-export type PackageNameErrorCode = 'EXAMPLE_ERROR_CODE'
+export type ORMapErrorCode = ''
 
-export class PackageNameError extends Error {
-  readonly code: PackageNameErrorCode
+export class ORMapError extends Error {
+  readonly code: ORMapErrorCode
 
-  constructor(code: PackageNameErrorCode, message?: string) {
+  constructor(code: ORMapErrorCode, message?: string) {
     const detail = message ?? code
-    super(`{@z-base/package-name} ${detail}`)
+    super(`{@sovereignbase/observed-remove-map} ${detail}`)
     this.code = code
-    this.name = 'PackageNameError'
+    this.name = 'ORMapError'
   }
 }
