@@ -1,12 +1,12 @@
-export type ORMapErrorCode = 'BAD_SNAPSHOT'
+export type OOMapErrorCode = 'BAD_SNAPSHOT'
 
-export class ORMapError extends Error {
-  readonly code: ORMapErrorCode
+export class OOMapError extends Error {
+  readonly code: OOMapErrorCode
 
-  constructor(code: ORMapErrorCode, message?: string) {
+  constructor(code: OOMapErrorCode, message?: string) {
     const detail = message ?? code
-    super(`{@sovereignbase/observed-remove-map} ${detail}`)
+    super(`{@sovereignbase/observed-overwrite-map} ${detail}`)
     this.code = code
-    this.name = 'ORMapError'
+    this.name = 'OOMapError'
   }
 }
