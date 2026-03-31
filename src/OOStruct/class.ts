@@ -25,7 +25,8 @@ export class OOStruct<T extends object> {
     this.__state = {} as OOStructState<T>
     this.__live = {} as T
 
-    const snapshotIsObject = typeof snapshot === 'object'
+    const snapshotIsObject =
+      snapshot && typeof snapshot !== 'object' && !Array.isArray(snapshot)
 
     for (const key of Object.keys(defaults)) {
       const defaultValue = defaults[key as keyof T]
@@ -41,9 +42,10 @@ export class OOStruct<T extends object> {
         }
       }
       this.__live[key as keyof T] = defaultValue
+      const root = uuidv7()
       this.__state[key as keyof T] = {
-        __uuidv7: uuidv7(),
-        __after: '',
+        __uuidv7: root,
+        __after: root,
         __value: defaultValue,
         __overwrites: new Set([]),
       }
@@ -88,13 +90,11 @@ export class OOStruct<T extends object> {
         )
         changes[key as K] = value as T[K]
       }
-      this.eventTarget.dispatchEvent(
-        new CustomEvent('delta', { detail: delta })
-      )
-      this.eventTarget.dispatchEvent(
-        new CustomEvent('change', { detail: changes })
-      )
     }
+    this.eventTarget.dispatchEvent(new CustomEvent('delta', { detail: delta }))
+    this.eventTarget.dispatchEvent(
+      new CustomEvent('change', { detail: changes })
+    )
   }
 
   merge<K extends keyof T>(replica: OOStructDelta<T>): void {
@@ -141,7 +141,7 @@ export class OOStruct<T extends object> {
     }
     if (Object.keys(delta).length > 0)
       this.eventTarget.dispatchEvent(
-        new CustomEvent('change', { detail: delta })
+        new CustomEvent('delta', { detail: delta })
       )
     if (Object.keys(changes).length > 0)
       this.eventTarget.dispatchEvent(
