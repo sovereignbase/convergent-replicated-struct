@@ -12,33 +12,35 @@ export type OOStructStateEntry<V> = {
   __overwrites: Set<string>
 }
 
-export type OOStructSnapshot<T extends object> = {
+export type OOStructSnapshot<T extends Record<string, unknown>> = {
   [K in keyof T]: OOStructSnapshotEntry<T[K]>
 }
 
-export type OOStructState<T extends object> = {
+export type OOStructState<T extends Record<string, unknown>> = {
   [K in keyof T]: OOStructStateEntry<T[K]>
 }
 
-export type OOStructDelta<T extends object> = Partial<OOStructSnapshot<T>>
+export type OOStructDelta<T extends Record<string, unknown>> = Partial<
+  OOStructSnapshot<T>
+>
 
-export type OOStructChanges<T extends object> = Partial<T>
+export type OOStructChanges<T extends Record<string, unknown>> = Partial<T>
 
-export type OOStructEventMap<T extends object> = {
+export type OOStructEventMap<T extends Record<string, unknown>> = {
   snapshot: OOStructSnapshot<T>
   delta: OOStructDelta<T>
   change: OOStructChanges<T>
 }
 
 export type OOStructEventListener<
-  T extends object,
+  T extends Record<string, unknown>,
   K extends keyof OOStructEventMap<T>,
 > =
   | ((event: CustomEvent<OOStructEventMap<T>[K]>) => void)
   | { handleEvent(event: CustomEvent<OOStructEventMap<T>[K]>): void }
 
 export type OOStructEventListenerFor<
-  T extends object,
+  T extends Record<string, unknown>,
   K extends string,
 > = K extends keyof OOStructEventMap<T>
   ? OOStructEventListener<T, K>
