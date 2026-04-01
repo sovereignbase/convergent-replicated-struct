@@ -31,15 +31,15 @@ TypeScript: bundled types / source TS / etc.
 
 4. Goals
 
-NEVER THROWS AN ERROR!
+NEVER THROWS AN ERROR ON INGRESS!
+
+Returns structured clones for safety…
 
 3–6 bullets, phrased as outcomes:
 
 “Developer-friendly API…”
 
 “No deps…”
-
-“Returns copies for safety…”
 
 5. Installation
 
