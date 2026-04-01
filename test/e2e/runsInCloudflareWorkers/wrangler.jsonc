@@ -1,0 +1,5 @@
+{
+  "name": "observed-overwrite-struct-e2e-cloudflare-workers",
+  "main": "./worker.mjs",
+  "compatibility_date": "2026-04-01",
+}

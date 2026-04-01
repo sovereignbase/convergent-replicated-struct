@@ -4,12 +4,7 @@ export default defineConfig({
   testDir: 'test/e2e',
   timeout: 30000,
   use: {
-    baseURL: 'http://127.0.0.1:4173',
-  },
-  webServer: {
-    command: 'node test/e2e/server.mjs',
-    url: 'http://127.0.0.1:4173',
-    reuseExistingServer: !process.env.CI,
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:4173',
   },
   projects: [
     {
