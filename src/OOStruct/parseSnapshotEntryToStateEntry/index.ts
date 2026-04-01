@@ -7,11 +7,15 @@ export function parseSnapshotEntryToStateEntry<V>(
   defaultValue: V,
   snapshotEntry: OOStructSnapshotEntry<V>
 ): OOStructStateEntry<V> | false {
+  if (
+    prototype(snapshotEntry) !== 'record' ||
+    !Object.hasOwn(snapshotEntry, '__value')
+  )
+    return false
+
   const [cloned, copiedValue] = safeStructuredClone(snapshotEntry.__value)
   if (
     !cloned ||
-    prototype(snapshotEntry) !== 'record' ||
-    !Object.hasOwn(snapshotEntry, '__value') ||
     !isUuidV7(snapshotEntry.__uuidv7) ||
     !isUuidV7(snapshotEntry.__after) ||
     !Array.isArray(snapshotEntry.__overwrites) ||
@@ -34,7 +38,7 @@ export function parseSnapshotEntryToStateEntry<V>(
 
   return {
     __uuidv7: snapshotEntry.__uuidv7,
-    __value: structuredClone(snapshotEntry.__value),
+    __value: copiedValue,
     __after: snapshotEntry.__after,
     __overwrites: overwrites,
   }

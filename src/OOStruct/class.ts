@@ -30,15 +30,15 @@ export class OOStruct<T extends Record<string, unknown>> {
         'NOT_CLONABLE',
         'Only values supported by structuredClone are accepted.'
       )
-    this.__defaults = { ...copiedDefaults }
+    this.__defaults = copiedDefaults
     this.__state = {} as OOStructState<T>
     this.__live = {} as T
 
     const snapshotIsObject =
       snapshot && typeof snapshot === 'object' && !Array.isArray(snapshot)
 
-    for (const key of Object.keys(defaults)) {
-      const defaultValue = defaults[key as keyof T]
+    for (const key of Object.keys(this.__defaults)) {
+      const defaultValue = this.__defaults[key as keyof T]
       if (snapshotIsObject && Object.hasOwn(snapshot, key)) {
         const valid = parseSnapshotEntryToStateEntry(
           defaultValue,
@@ -259,11 +259,16 @@ export class OOStruct<T extends Record<string, unknown>> {
   }
 
   values<K extends keyof T>(): Array<T[K]> {
-    return Object.values(this.__live) as Array<T[K]>
+    return Object.values(this.__live).map((value) =>
+      structuredClone(value)
+    ) as Array<T[K]>
   }
 
   entries<K extends keyof T>(): Array<[K, T[K]]> {
-    return Object.entries(this.__live) as Array<[K, T[K]]>
+    return Object.entries(this.__live).map(([key, value]) => [
+      key as K,
+      structuredClone(value as T[K]),
+    ])
   }
 
   /**EVENTS*/
