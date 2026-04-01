@@ -46,26 +46,29 @@ vlt install jsr:@sovereignbase/observed-overwrite-struct
 ```ts
 import { OOStruct } from '@sovereignbase/observed-overwrite-struct'
 
-const defaults = {
+type TodoStruct = {
+  title: string
+  count: number
+  meta: { done: boolean }
+  tags: string[]
+}
+
+const alice = OOStruct.create<TodoStruct>({
   title: '',
   count: 0,
   meta: { done: false },
-  tags: [] as string[],
-}
-
-const alice = OOStruct.create(defaults)
-const bob = OOStruct.create(defaults)
-
-const deltas = []
-
-alice.addEventListener('delta', (event) => {
-  deltas.push(event.detail)
+  tags: [],
+})
+const bob = OOStruct.create<TodoStruct>({
+  title: '',
+  count: 0,
+  meta: { done: false },
+  tags: [],
 })
 
+alice.addEventListener('delta', (event) => bob.merge(event.detail))
 alice.update('title', 'hello world')
 alice.update('meta', { done: true })
-
-for (const delta of deltas) bob.merge(delta)
 
 console.log(bob.read('title')) // "hello world"
 console.log(bob.read('meta')) // { done: true }
@@ -74,15 +77,21 @@ console.log(bob.read('meta')) // { done: true }
 ### Hydrating from a snapshot
 
 ```ts
-import { OOStruct } from '@sovereignbase/observed-overwrite-struct'
+import {
+  OOStruct,
+  type OOStructSnapshot,
+} from '@sovereignbase/observed-overwrite-struct'
 
-const defaults = {
-  title: '',
-  count: 0,
+type DraftStruct = {
+  title: string
+  count: number
 }
 
-const source = new OOStruct(defaults)
-let snapshot
+const source = new OOStruct<DraftStruct>({
+  title: '',
+  count: 0,
+})
+let snapshot!: OOStructSnapshot<DraftStruct>
 
 source.addEventListener(
   'snapshot',
@@ -95,7 +104,13 @@ source.addEventListener(
 source.update('title', 'draft')
 source.snapshot()
 
-const restored = OOStruct.create(defaults, snapshot)
+const restored = OOStruct.create<DraftStruct>(
+  {
+    title: '',
+    count: 0,
+  },
+  snapshot
+)
 
 console.log(restored.entries()) // [['title', 'draft'], ['count', 0]]
 ```
@@ -130,17 +145,26 @@ replica.addEventListener('snapshot', (event) => {
 ### Acknowledgements and garbage collection
 
 ```ts
-import { OOStruct } from '@sovereignbase/observed-overwrite-struct'
+import {
+  OOStruct,
+  type OOStructAck,
+} from '@sovereignbase/observed-overwrite-struct'
 
-const defaults = {
-  title: '',
-  count: 0,
+type CounterStruct = {
+  title: string
+  count: number
 }
 
-const left = new OOStruct(defaults)
-const right = new OOStruct(defaults)
+const left = new OOStruct<CounterStruct>({
+  title: '',
+  count: 0,
+})
+const right = new OOStruct<CounterStruct>({
+  title: '',
+  count: 0,
+})
 
-const frontiers = []
+const frontiers: Array<OOStructAck<CounterStruct>> = []
 
 left.addEventListener(
   'ack',
