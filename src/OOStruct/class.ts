@@ -13,7 +13,7 @@ import type {
 import { OOStructError } from '../.errors/class.js'
 import { parseSnapshotEntryToStateEntry } from './parseSnapshotEntryToStateEntry/index.js'
 import { parseStateEntryToSnapshotEntry } from './parseStateEntryToSnapshotEntry/index.js'
-import { isUuidV7, prototype } from '@sovereignbase/utils'
+import { isUuidV7, prototype, safeStructuredClone } from '@sovereignbase/utils'
 
 export class OOStruct<T extends Record<string, unknown>> {
   private readonly __eventTarget = new EventTarget()
@@ -24,7 +24,13 @@ export class OOStruct<T extends Record<string, unknown>> {
     defaults: { [K in keyof T]: T[K] },
     snapshot?: OOStructSnapshot<T>
   ) {
-    this.__defaults = { ...defaults }
+    const [cloned, copiedDefaults] = safeStructuredClone(defaults)
+    if (!cloned)
+      throw new OOStructError(
+        'NOT_CLONABLE',
+        'Only values supported by structuredClone are accepted.'
+      )
+    this.__defaults = { ...copiedDefaults }
     this.__state = {} as OOStructState<T>
     this.__live = {} as T
 
@@ -68,17 +74,21 @@ export class OOStruct<T extends Record<string, unknown>> {
   }
 
   update<K extends keyof T>(key: K, value: T[K]): void {
-    if (prototype(value) !== prototype(this.__defaults[key]))
+    const [cloned, copiedValue] = safeStructuredClone(value)
+    if (!cloned)
+      throw new OOStructError(
+        'NOT_CLONABLE',
+        'Only values supported by structuredClone are accepted.'
+      )
+
+    if (prototype(copiedValue) !== prototype(this.__defaults[key]))
       throw new OOStructError(
         'TYPE_MISMATCH',
         'Values type does not match default values type.'
       )
     const delta: OOStructDelta<T> = {}
     const change: OOStructChange<T> = {}
-    delta[key] = this.overwriteAndReturnSnapshotEntry(
-      key,
-      structuredClone(value)
-    )
+    delta[key] = this.overwriteAndReturnSnapshotEntry(key, copiedValue)
     change[key] = value
     this.__eventTarget.dispatchEvent(
       new CustomEvent('delta', { detail: delta })

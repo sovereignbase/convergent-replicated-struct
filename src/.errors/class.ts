@@ -1,4 +1,4 @@
-export type OOStructErrorCode = 'TYPE_MISMATCH'
+export type OOStructErrorCode = 'TYPE_MISMATCH' | 'NOT_CLONABLE'
 
 export class OOStructError extends Error {
   readonly code: OOStructErrorCode

@@ -2,18 +2,20 @@ import type {
   OOStructSnapshotEntry,
   OOStructStateEntry,
 } from '../../.types/index.js'
-import { isUuidV7, prototype } from '@sovereignbase/utils'
+import { isUuidV7, prototype, safeStructuredClone } from '@sovereignbase/utils'
 export function parseSnapshotEntryToStateEntry<V>(
   defaultValue: V,
   snapshotEntry: OOStructSnapshotEntry<V>
 ): OOStructStateEntry<V> | false {
+  const [cloned, copiedValue] = safeStructuredClone(snapshotEntry.__value)
   if (
+    !cloned ||
     prototype(snapshotEntry) !== 'record' ||
     !Object.hasOwn(snapshotEntry, '__value') ||
     !isUuidV7(snapshotEntry.__uuidv7) ||
     !isUuidV7(snapshotEntry.__after) ||
     !Array.isArray(snapshotEntry.__overwrites) ||
-    prototype(snapshotEntry.__value) !== prototype(defaultValue)
+    prototype(copiedValue) !== prototype(defaultValue)
   )
     return false
 
