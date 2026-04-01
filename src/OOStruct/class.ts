@@ -193,7 +193,7 @@ export class OOStruct<T extends Record<string, unknown>> {
   }
 
   garbageCollect<K extends Extract<keyof T, string>>(
-    frontiers: Array<OOStructAcknowledgementFrontier<K>>
+    frontiers: Array<OOStructAck<T>>
   ): void {
     if (!Array.isArray(frontiers) || frontiers.length < 1) return
     const smallestAcknowledgementsPerKey: OOStructAck<T> = {}
