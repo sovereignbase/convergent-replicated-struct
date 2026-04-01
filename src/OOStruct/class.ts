@@ -188,13 +188,14 @@ export class OOStruct<T extends Record<string, unknown>> {
 
       const target = this.__state[key as K]
       const current = { ...target }
-      let floor = ''
+      let frontier = ''
       for (const overwrite of target.__overwrites) {
-        if (floor < overwrite) floor = overwrite
+        if (frontier < overwrite) frontier = overwrite
       }
 
       for (const overwrite of candidate.__overwrites) {
-        if (overwrite <= floor || target.__overwrites.has(overwrite)) continue
+        if (overwrite <= frontier || target.__overwrites.has(overwrite))
+          continue
         target.__overwrites.add(overwrite)
       }
 
