@@ -5,6 +5,12 @@ export type OOStructSnapshotEntry<V> = {
   __overwrites: Array<string>
 }
 
+export type OOStructSnapshot<T extends Record<string, unknown>> = {
+  [K in keyof T]: OOStructSnapshotEntry<T[K]>
+}
+
+/***/
+
 export type OOStructStateEntry<V> = {
   __uuidv7: string
   __value: V
@@ -12,19 +18,28 @@ export type OOStructStateEntry<V> = {
   __overwrites: Set<string>
 }
 
-export type OOStructSnapshot<T extends Record<string, unknown>> = {
-  [K in keyof T]: OOStructSnapshotEntry<T[K]>
-}
-
 export type OOStructState<T extends Record<string, unknown>> = {
   [K in keyof T]: OOStructStateEntry<T[K]>
 }
+
+/***/
 
 export type OOStructDelta<T extends Record<string, unknown>> = Partial<
   OOStructSnapshot<T>
 >
 
+/***/
+
 export type OOStructChanges<T extends Record<string, unknown>> = Partial<T>
+
+/***/
+
+export type OOStructAcknowledgementFrontier<K extends string> = Record<
+  K,
+  string
+>
+
+/***/
 
 export type OOStructEventMap<T extends Record<string, unknown>> = {
   snapshot: OOStructSnapshot<T>

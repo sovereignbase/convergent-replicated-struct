@@ -14,4 +14,6 @@ export type {
   OOStructDelta,
   /***/
   OOStructChanges,
+  /***/
+  OOStructAcknowledgementFrontier,
 } from './.types/index.js'

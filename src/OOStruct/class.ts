@@ -8,6 +8,7 @@ import type {
   OOStructSnapshotEntry,
   OOStructState,
   OOStructStateEntry,
+  OOStructAcknowledgementFrontier,
 } from '../.types/index.js'
 import { parseSnapshotEntryToStateEntry } from './parseSnapshotEntryToStateEntry/index.js'
 import { parseStateEntryToSnapshotEntry } from './parseStateEntryToSnapshotEntry/index.js'
@@ -177,6 +178,61 @@ export class OOStruct<T extends Record<string, unknown>> {
     this.eventTarget.dispatchEvent(
       new CustomEvent('snapshot', { detail: snapshot })
     )
+  }
+
+  acks<
+    K extends Extract<keyof T, string>,
+  >(): OOStructAcknowledgementFrontier<K> {
+    const acks = {} as OOStructAcknowledgementFrontier<K>
+    for (const [key, value] of Object.entries(this.__state)) {
+      let max = ''
+      for (const overwrite of (value as OOStructStateEntry<T[K]>)
+        .__overwrites) {
+        if (max < overwrite) max = overwrite
+      }
+      acks[key as K] = max
+    }
+    return acks
+  }
+
+  keys<K extends keyof T>(): Array<K> {
+    return Object.keys(this.__live) as Array<K>
+  }
+
+  values<K extends keyof T>(): Array<T[K]> {
+    return Object.values(this.__live) as Array<T[K]>
+  }
+
+  entries<K extends keyof T>(): Array<[K, T[K]]> {
+    return Object.entries(this.__live) as Array<[K, T[K]]>
+  }
+
+  garbageCollect<K extends Extract<keyof T, string>>(
+    frontiers: Array<OOStructAcknowledgementFrontier<K>>
+  ): void {
+    if (!Array.isArray(frontiers) || frontiers.length < 1) return
+    const smallestAcknowledgementsPerKey = {
+      ...frontiers[0],
+    } as OOStructAcknowledgementFrontier<K>
+
+    for (const frontier of frontiers.slice(1)) {
+      for (const [key, value] of Object.entries(frontier)) {
+        if (typeof value === 'string') {
+          if (smallestAcknowledgementsPerKey[key as K] <= value) continue
+          smallestAcknowledgementsPerKey[key as K] = value
+        }
+      }
+    }
+
+    for (const [key, value] of Object.entries(smallestAcknowledgementsPerKey)) {
+      const target = this.__state[key]
+      if (typeof value === 'string') {
+        target.__overwrites.forEach((uuidv7, _, overwrites) => {
+          if (uuidv7 === target.__after || uuidv7 > value) return
+          overwrites.delete(uuidv7)
+        })
+      }
+    }
   }
 
   /**
