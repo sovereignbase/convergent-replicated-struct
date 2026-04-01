@@ -5,15 +5,16 @@ export type {
   OOStructEventListener,
   OOStructEventListenerFor,
   /***/
-  OOStructSnapshot,
-  OOStructSnapshotEntry,
-  /***/
   OOStructState,
   OOStructStateEntry,
   /***/
-  OOStructDelta,
+  OOStructSnapshot,
+  OOStructSnapshotEntry,
   /***/
-  OOStructChanges,
+  OOStructChange,
+  /***/
+  OOStructDelta,
+  OOStructAck,
   /***/
   OOStructAcknowledgementFrontier,
 } from './.types/index.js'

@@ -125,9 +125,13 @@ export class OOStruct<T extends Record<string, unknown>> {
 
       const target = this.__state[key as K]
       const current = { ...target }
+      let floor = ''
+      for (const overwrite of target.__overwrites) {
+        if (floor < overwrite) floor = overwrite
+      }
 
       for (const overwrite of canditate.__overwrites) {
-        if (target.__overwrites.has(overwrite)) continue
+        if (overwrite <= floor || target.__overwrites.has(overwrite)) continue
         target.__overwrites.add(overwrite)
       }
 
@@ -197,21 +201,37 @@ export class OOStruct<T extends Record<string, unknown>> {
 
     for (const frontier of frontiers) {
       for (const [key, value] of Object.entries(frontier)) {
-        if (typeof value === 'string' && isUuidV7(value)) {
-          if (smallestAcknowledgementsPerKey[key as K] <= value) continue
-          smallestAcknowledgementsPerKey[key as K] = value
-        }
+        if (
+          !Object.hasOwn(this.__state, key) ||
+          typeof value !== 'string' ||
+          !isUuidV7(value)
+        )
+          continue
+
+        const current = smallestAcknowledgementsPerKey[key as K]
+        if (
+          typeof current === 'string' &&
+          isUuidV7(current) &&
+          current <= value
+        )
+          continue
+        smallestAcknowledgementsPerKey[key as K] = value
       }
     }
 
     for (const [key, value] of Object.entries(smallestAcknowledgementsPerKey)) {
+      if (
+        !Object.hasOwn(this.__state, key) ||
+        typeof value !== 'string' ||
+        !isUuidV7(value)
+      )
+        continue
+
       const target = this.__state[key]
-      if (typeof value === 'string') {
-        target.__overwrites.forEach((uuidv7, _, overwrites) => {
-          if (uuidv7 === target.__after || uuidv7 > value) return
-          overwrites.delete(uuidv7)
-        })
-      }
+      target.__overwrites.forEach((uuidv7, _, overwrites) => {
+        if (uuidv7 === target.__after || uuidv7 > value) return
+        overwrites.delete(uuidv7)
+      })
     }
   }
 
