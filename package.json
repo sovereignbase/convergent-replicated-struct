@@ -2,8 +2,8 @@
   "type": "module",
   "license": "Apache-2.0",
   "name": "@sovereignbase/observed-overwrite-struct",
-  "version": "0.0.0",
-  "description": "State-based CRDT for fixed-key object structs with per-field overwrite tracking, UUIDv7 conflict resolution, snapshots, deltas, acknowledgements, and garbage collection.",
+  "version": "1.0.0",
+  "description": "State-based CRDT for fixed-key object structs with per-field overwrite tracking.",
   "keywords": [
     "crdt",
     "state-based-crdt",
@@ -62,21 +62,20 @@
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
-    "@playwright/test": "^1.59.0",
+    "@playwright/test": "^1.59.1",
     "@types/node": "^25.5.0",
     "c8": "^11.0.0",
     "edge-runtime": "^4.0.1",
     "fast-glob": "^3.3.3",
     "husky": "^9.1.7",
-    "playwright": "^1.59.0",
+    "playwright": "^1.59.1",
     "prettier": "^3.8.1",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "wrangler": "^4.79.0"
   },
   "dependencies": {
-    "@sovereignbase/utils": "^1.1.0",
-    "uuid": "^13.0.0"
+    "@sovereignbase/utils": "^1.1.0"
   },
   "repository": {
     "type": "git",
