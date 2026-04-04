@@ -2,7 +2,7 @@
   "type": "module",
   "license": "Apache-2.0",
   "name": "@sovereignbase/convergent-replicated-struct",
-  "version": "0.0.0",
+  "version": "1.0.1",
   "description": "State-based CRDT for fixed-key object structs with per-field overwrite tracking.",
   "keywords": [
     "crdt",
