@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/sovereignbase/convergent-replicated-struct/compare/v1.0.1...v1.1.0) (2026-04-12)
+
+
+### Features
+
+* Added a clone() method + refactored everything :p ([097beb1](https://github.com/sovereignbase/convergent-replicated-struct/commit/097beb1b4d44167655c8e8267d0342247ad16a38))
+
 ## [1.0.1](https://github.com/sovereignbase/convergent-replicated-struct/compare/v1.0.0...v1.0.1) (2026-04-04)
 
 
