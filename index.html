@@ -828,7 +828,7 @@ interface CRStruct {
     optional (EventListenerOptions or boolean) options = {}
   );
   object toJSON();
-  DOMString toString();
+  stringifier DOMString ();
   iterable&lt;DOMString, any&gt;;
 };
 
