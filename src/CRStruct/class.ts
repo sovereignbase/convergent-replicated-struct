@@ -102,9 +102,11 @@ class CRStructRaw<T extends Record<string, unknown>> {
         }
       },
       ownKeys(target) {
-        return [...Reflect.ownKeys(target.state.defaults)]
+        return [
+          ...Reflect.ownKeys(target),
+          ...Reflect.ownKeys(target.state.defaults),
+        ]
       },
-
       getOwnPropertyDescriptor(target, key) {
         // Preserve normal property checks for unknown keys.
         if (typeof key !== 'string' || !keys.has(key))
