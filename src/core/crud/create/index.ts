@@ -1,4 +1,12 @@
-import { CRStructSnapshot } from '../../../.types/index.js'
+import type {
+  CRStructState,
+  CRStructStateEntry,
+  CRStructSnapshot,
+} from '../../../.types/index.js'
+import { safeStructuredClone, prototype } from '@sovereignbase/utils'
+import { CRStructError } from '../../../.errors/class.js'
+import { parseSnapshotEntryToStateEntry } from '../../../.helpers/parseSnapshotEntryToStateEntry/index.js'
+import { v7 as uuidv7 } from 'uuid'
 
 export function __create<T extends Record<string, unknown>>(
   defaults: T,
@@ -10,32 +18,32 @@ export function __create<T extends Record<string, unknown>>(
       'DEFAULTS_NOT_CLONEABLE',
       'Default values must be supported by structuredClone.'
     )
-  this.defaults = copiedDefaults
-  this.state = {} as CRStructState<T>
-  this.live = {} as T
+  const state: CRStructState<T> = {
+    entries: {} as { [K in keyof T]: CRStructStateEntry<T[K]> },
+    defaults: copiedDefaults,
+  }
 
   const snapshotIsObject = snapshot && prototype(snapshot) === 'record'
 
-  for (const key of Object.keys(this.defaults)) {
-    const defaultValue = this.defaults[key as keyof T]
+  for (const key of Object.keys(defaults)) {
+    const defaultValue = defaults[key as keyof T]
     if (snapshotIsObject && Object.hasOwn(snapshot, key)) {
       const valid = parseSnapshotEntryToStateEntry(
         defaultValue,
         snapshot[key as keyof T]
       )
       if (valid) {
-        this.live[key as keyof T] = valid.value
-        this.state[key as keyof T] = valid
+        state.entries[key as keyof T] = valid
         continue
       }
     }
-    this.live[key as keyof T] = defaultValue
     const root = uuidv7()
-    this.state[key as keyof T] = {
+    state.entries[key as keyof T] = {
       uuidv7: uuidv7(),
       predecessor: root,
       value: defaultValue,
       tombstones: new Set([root]),
     }
   }
+  return state
 }

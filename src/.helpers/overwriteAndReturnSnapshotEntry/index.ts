@@ -18,11 +18,11 @@ export function overwriteAndReturnSnapshotEntry<
   value: T[keyof T],
   crStructReplica: CRStructState<T>
 ): CRStructSnapshotEntry<T[keyof T]> {
-  const target = crStructReplica[key]
-  const old = { ...target }
+  const target = crStructReplica.entries[key]
+  const oldUuidv7 = target.uuidv7
   target.uuidv7 = uuidv7()
   target.value = value
-  target.predecessor = old.uuidv7
-  target.tombstones.add(old.uuidv7)
+  target.predecessor = oldUuidv7
+  target.tombstones.add(oldUuidv7)
   return parseStateEntryToSnapshotEntry(target)
 }

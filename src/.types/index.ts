@@ -29,7 +29,8 @@ export type CRStructStateEntry<V> = {
  * Represents the internal replicated state of an OO-Struct replica.
  */
 export type CRStructState<T extends Record<string, unknown>> = {
-  [K in keyof T]: CRStructStateEntry<T[K]>
+  entries: { [K in keyof T]: CRStructStateEntry<T[K]> }
+  defaults: T
 }
 
 /**Serlialized projection of replica state*/
