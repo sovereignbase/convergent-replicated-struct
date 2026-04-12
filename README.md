@@ -333,7 +333,8 @@ npm run test
 
 What the current test suite covers:
 
-- Coverage on built `dist/**/*.js` via `c8`.
+- Coverage on built `dist/**/*.js`: `100%` statements, `100%` branches,
+  `100%` functions, and `100%` lines via `c8`.
 - Public `CRStruct` surface: proxy property access, deletes, `clear()`,
   iteration, events, and JSON / inspect behavior.
 - Core edge paths and hostile ingress handling for `__create`, `__read`,
@@ -350,6 +351,7 @@ What the current test suite covers:
   - Cloudflare Workers ESM
   - Edge Runtime ESM
   - Browsers via Playwright: Chromium, Firefox, WebKit, mobile Chrome, mobile Safari
+- Current status: `npm run test` passes on Node `v22.14.0` (`win32 x64`).
 
 ## Benchmarks
 
@@ -360,11 +362,40 @@ npm run bench
 The benchmark runner currently uses:
 
 - `HISTORY_DEPTH = 5_000`
-- grouped scenarios for `crud`, `mags`, and `class`
+- `RUN_TIMES = 250`
 - output columns: `group`, `scenario`, `n`, `ops`, `ms`, `ms/op`, `ops/sec`
 
-Run it locally to get machine-specific results for your current Node version,
-platform, and architecture.
+Last measured on Node `v22.14.0` (`win32 x64`):
+
+| group   | scenario                         |     n | ops |     ms | ms/op |    ops/sec |
+| ------- | -------------------------------- | ----: | --: | -----: | ----: | ---------: |
+| `crud`  | `create / hydrate snapshot`      | 5,000 | 250 | 714.80 |  2.86 |     349.75 |
+| `crud`  | `read / primitive field`         | 5,000 | 250 |   0.55 |  0.00 | 450,531.63 |
+| `crud`  | `read / object field`            | 5,000 | 250 |   0.83 |  0.00 | 301,568.15 |
+| `crud`  | `update / overwrite string`      | 5,000 | 250 |   5.77 |  0.02 |  43,291.54 |
+| `crud`  | `update / overwrite object`      | 5,000 | 250 |   4.79 |  0.02 |  52,198.61 |
+| `crud`  | `delete / reset single field`    | 5,000 | 250 |   3.67 |  0.01 |  68,162.61 |
+| `crud`  | `delete / reset all fields`      | 5,000 | 250 |  18.86 |  0.08 |  13,253.95 |
+| `mags`  | `snapshot`                       | 5,000 | 250 |   7.80 |  0.03 |  32,062.38 |
+| `mags`  | `acknowledge`                    | 5,000 | 250 |  39.72 |  0.16 |   6,294.04 |
+| `mags`  | `garbage collect`                | 5,000 | 250 | 260.93 |  1.04 |     958.12 |
+| `mags`  | `merge ordered deltas`           | 5,000 | 250 | 204.53 |  0.82 |   1,222.32 |
+| `mags`  | `merge direct successor`         | 5,000 | 250 |   1.46 |  0.01 | 171,385.48 |
+| `mags`  | `merge shuffled gossip`          | 5,000 | 250 | 263.91 |  1.06 |     947.29 |
+| `mags`  | `merge stale conflict`           | 5,000 | 250 |   2.11 |  0.01 | 118,315.19 |
+| `class` | `constructor / hydrate snapshot` | 5,000 | 250 | 781.32 |  3.13 |     319.97 |
+| `class` | `property read / primitive`      | 5,000 | 250 |   0.45 |  0.00 | 559,659.73 |
+| `class` | `property read / object`         | 5,000 | 250 |   0.95 |  0.00 | 262,687.82 |
+| `class` | `property write / string`        | 5,000 | 250 |   5.04 |  0.02 |  49,613.02 |
+| `class` | `property write / object`        | 5,000 | 250 |   8.57 |  0.03 |  29,157.24 |
+| `class` | `delete property`                | 5,000 | 250 |   4.80 |  0.02 |  52,128.95 |
+| `class` | `clear()`                        | 5,000 | 250 |  15.35 |  0.06 |  16,283.14 |
+| `class` | `snapshot`                       | 5,000 | 250 |   9.49 |  0.04 |  26,356.29 |
+| `class` | `acknowledge`                    | 5,000 | 250 |  45.49 |  0.18 |   5,495.59 |
+| `class` | `garbage collect`                | 5,000 | 250 | 162.70 |  0.65 |   1,536.53 |
+| `class` | `merge ordered deltas`           | 5,000 | 250 | 193.20 |  0.77 |   1,293.98 |
+| `class` | `merge direct successor`         | 5,000 | 250 |   2.90 |  0.01 |  86,331.93 |
+| `class` | `merge shuffled gossip`          | 5,000 | 250 | 264.43 |  1.06 |     945.44 |
 
 ## License
 
