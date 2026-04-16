@@ -867,11 +867,12 @@ typedef record&lt;DOMString, DOMString&gt; CRStructAck;
           defined by the declarations above.
         </p>
         <p>
-          <code>JSON.stringify(struct)</code> serializes the binding through its
-          current <a>snapshot</a>, <code>for...of</code> iterates detached
+          When the current <a>snapshot</a> is JSON-compatible,
+          <code>JSON.stringify(struct)</code> serializes the binding through
+          that snapshot. <code>for...of</code> iterates detached
           <code>[key, value]</code> pairs for the current live fields, and
-          <code>toString()</code> returns the JSON string form of the current
-          snapshot.
+          <code>toString()</code> attempts to return the JSON string form of
+          the current snapshot.
         </p>
       </section>
 
@@ -1118,14 +1119,18 @@ typedef record&lt;DOMString, DOMString&gt; CRStructAck;
         <section data-dfn-for="CRStruct">
           <h5><dfn class="export">toJSON()</dfn></h5>
           <p>
-            Return the same serialized shape as <a>snapshot</a>. This is the
-            value used by <code>JSON.stringify</code>.
+            Return the same detached structured-clone shape as <a>snapshot</a>.
+            This is the value used by <code>JSON.stringify</code>.
           </p>
         </section>
 
         <section data-dfn-for="CRStruct">
           <h5><dfn class="export">toString()</dfn></h5>
-          <p>Return the JSON string form of the current <a>snapshot</a>.</p>
+          <p>
+            Attempt to return the JSON string form of the current
+            <a>snapshot</a>. This can fail when field values are not
+            JSON-compatible.
+          </p>
         </section>
 
         <section data-dfn-for="CRStruct">

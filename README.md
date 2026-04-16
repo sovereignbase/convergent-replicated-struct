@@ -127,6 +127,11 @@ const restored = new CRStruct<DraftStruct>(
 console.log(restored.entries()) // [['title', 'draft'], ['count', 0]]
 ```
 
+This `localStorage` example assumes your field values are JSON-compatible.
+For general `structuredClone`-compatible values such as `Date`, `Map`, or
+`BigInt`, persist snapshots with a structured-clone-capable store or an
+application-level codec instead of plain `JSON.stringify` / `JSON.parse`.
+
 ### Event channels
 
 ```ts
@@ -265,17 +270,18 @@ const defaults: DraftStruct = {
   count: 0,
 }
 
-const replica = __create(defaults)
-const local = __update('title', 'draft', replica)
+const source = __create(defaults)
+const target = __create(defaults)
+const local = __update('title', 'draft', source)
 
 if (local) {
   const outgoing: CRStructDelta<DraftStruct> = local.delta
-  const remoteChange = __merge(outgoing, replica)
+  const remoteChange = __merge(outgoing, target)
 
   console.log(remoteChange)
 }
 
-const snapshot: CRStructSnapshot<DraftStruct> = __snapshot(replica)
+const snapshot: CRStructSnapshot<DraftStruct> = __snapshot(target)
 console.log(snapshot)
 ```
 
@@ -307,10 +313,12 @@ Ingress stays tolerant:
 
 ### Safety and copying semantics
 
-- Snapshots are serializable full-state payloads keyed by field name.
-- Deltas are serializable gossip payloads keyed by field name.
+- Snapshots are detached structured-clone payloads keyed by field name.
+- Deltas are detached structured-clone gossip payloads keyed by field name.
 - `change` is a minimal field-keyed visible patch.
-- `toJSON()` returns a detached serializable snapshot.
+- `toJSON()` returns a detached structured-clone snapshot.
+- `JSON.stringify()` and `toString()` are only reliable when field values are
+  JSON-compatible.
 - Direct property reads, `for...of`, `values()`, `entries()`, and `clone()`
   expose detached copies of visible values rather than mutable references into
   replica state.
@@ -367,7 +375,7 @@ npm run bench
 The benchmark runner currently uses:
 
 - `HISTORY_DEPTH = 5_000`
-- `RUN_TIMES = 250`
+- `OPS = 250`
 - output columns: `group`, `scenario`, `n`, `ops`, `ms`, `ms/op`, `ops/sec`
 
 Last measured on Node `v22.14.0` (`win32 x64`):
