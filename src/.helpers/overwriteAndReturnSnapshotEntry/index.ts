@@ -2,7 +2,7 @@ import type {
   CRStructState,
   CRStructSnapshotEntry,
 } from '../../.types/index.js'
-import { parseStateEntryToSnapshotEntry } from '../index.js'
+import { transformStateEntryToSnapshotEntry } from '../index.js'
 import { v7 as uuidv7 } from 'uuid'
 /**
  * Overwrites a field and returns the serialized delta entry for that overwrite.
@@ -24,5 +24,5 @@ export function overwriteAndReturnSnapshotEntry<
   target.value = value
   target.predecessor = oldUuidv7
   target.tombstones.add(oldUuidv7)
-  return parseStateEntryToSnapshotEntry(target)
+  return transformStateEntryToSnapshotEntry(target)
 }

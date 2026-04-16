@@ -13,7 +13,7 @@ import { isUuidV7, prototype, safeStructuredClone } from '@sovereignbase/utils'
  * @param snapshotEntry - The serialized entry to validate and parse.
  * @returns The parsed state entry, or `false` when the entry is invalid.
  */
-export function parseSnapshotEntryToStateEntry<V>(
+export function transformSnapshotEntryToStateEntry<V>(
   defaultValue: V,
   snapshotEntry: CRStructSnapshotEntry<V>
 ): CRStructStateEntry<V> | false {

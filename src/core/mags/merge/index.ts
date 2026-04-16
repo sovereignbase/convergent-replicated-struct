@@ -5,8 +5,8 @@ import type {
   CRStructStateEntry,
 } from '../../../.types/index.js'
 import {
-  parseSnapshotEntryToStateEntry,
-  parseStateEntryToSnapshotEntry,
+  transformSnapshotEntryToStateEntry,
+  transformStateEntryToSnapshotEntry,
   overwriteAndReturnSnapshotEntry,
 } from '../../../.helpers/index.js'
 
@@ -53,7 +53,7 @@ export function __merge<T extends Record<string, unknown>>(
   for (const [key, value] of Object.entries(crStructDelta)) {
     if (!Object.hasOwn(crStructReplica.defaults, key)) continue
 
-    const candidate = parseSnapshotEntryToStateEntry(
+    const candidate = transformSnapshotEntryToStateEntry(
       crStructReplica.defaults[key],
       value
     ) as CRStructStateEntry<T[keyof T]>
@@ -109,7 +109,7 @@ export function __merge<T extends Record<string, unknown>>(
     }
 
     target.tombstones.add(candidate.uuidv7)
-    delta[key as keyof T] = parseStateEntryToSnapshotEntry(target)
+    delta[key as keyof T] = transformStateEntryToSnapshotEntry(target)
     hasDelta = true
   }
   if (!hasDelta && !hasChange) return false

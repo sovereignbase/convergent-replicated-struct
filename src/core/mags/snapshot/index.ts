@@ -3,7 +3,7 @@ import type {
   CRStructSnapshot,
   CRStructStateEntry,
 } from '../../../.types/index.js'
-import { parseStateEntryToSnapshotEntry } from '../../../.helpers/parseStateEntryToSnapshotEntry/index.js'
+import { transformStateEntryToSnapshotEntry } from '../../../.helpers/index.js'
 
 /**
  * Serializes the current replica state into a snapshot projection.
@@ -29,7 +29,7 @@ export function __snapshot<T extends Record<string, unknown>>(
   const snapshot = {} as CRStructSnapshot<T>
 
   for (const [key, value] of Object.entries(crStructReplica.entries)) {
-    snapshot[key as keyof T] = parseStateEntryToSnapshotEntry(
+    snapshot[key as keyof T] = transformStateEntryToSnapshotEntry(
       value as CRStructStateEntry<T[keyof T]>
     )
   }

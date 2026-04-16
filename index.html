@@ -507,9 +507,10 @@
                 <li>
                   If <var>snapshotIsRecord</var> is true, the snapshot has an
                   own property for that key, and the snapshot entry successfully
-                  runs the <a>mint a snapshot field entry</a> algorithm against
-                  <var>defaultValue</var>, then store the minted entry as the
-                  live field entry and continue to the next key.
+                  runs the
+                  <a>transform a snapshot entry to a state entry</a> algorithm
+                  against <var>defaultValue</var>, then store the minted entry
+                  as the live field entry and continue to the next key.
                 </li>
                 <li>
                   Otherwise mint one fresh root UUIDv7 and one fresh winning
@@ -610,9 +611,10 @@
                   continue.
                 </li>
                 <li>
-                  Run the <a>mint a snapshot field entry</a> algorithm against
-                  the local default value for that key. If minting fails, then
-                  continue.
+                  Run the
+                  <a>transform a snapshot entry to a state entry</a> algorithm
+                  against the local default value for that key. If minting
+                  fails, then continue.
                 </li>
                 <li>
                   Let <var>target</var> be the current local field entry for
@@ -784,7 +786,7 @@
             <li>Let the result be an empty record.</li>
             <li>
               For each current local <a>field entry</a>, run the
-              <a>shed a live field entry</a> algorithm.
+              <a>transform a state entry to a snapshot entry</a> algorithm.
             </li>
             <li>
               Store each shed field entry in the result under its field key.
@@ -957,7 +959,7 @@ typedef record&lt;DOMString, DOMString&gt; CRStructAck;
         <h3>Auxiliary Algorithms</h3>
 
         <section>
-          <h4><dfn>mint a snapshot field entry</dfn></h4>
+          <h4><dfn>transform a snapshot entry to a state entry</dfn></h4>
           <ol class="algorithm">
             <li>
               If the candidate value is not a record, then return failure.
@@ -1005,7 +1007,7 @@ typedef record&lt;DOMString, DOMString&gt; CRStructAck;
         </section>
 
         <section>
-          <h4><dfn>shed a live field entry</dfn></h4>
+          <h4><dfn>transform a state entry to a snapshot entry</dfn></h4>
           <p>
             Return a new <a>serializable object</a> whose <code>uuidv7</code>,
             <code>value</code>, <code>predecessor</code>, and

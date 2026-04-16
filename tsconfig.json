@@ -12,9 +12,5 @@
     "skipLibCheck": true,
     "lib": ["es2024", "dom", "dom.iterable", "webworker"]
   },
-  "include": [
-    "src",
-    "src/.helpers/parseSnapshotEntryToStateEntry",
-    "src/.helpers/parseStateEntryToSnapshotEntry"
-  ]
+  "include": ["src"]
 }

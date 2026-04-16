@@ -4,12 +4,12 @@ import type {
 } from '../../.types/index.js'
 
 /**
- * Serializes a field state entry into a snapshot entry.
+ * Makes a field state entry into a serializeable snapshot entry.
  *
  * @param stateEntry - The internal state entry to serialize.
- * @returns The serialized snapshot entry.
+ * @returns The serializeable snapshot entry.
  */
-export function parseStateEntryToSnapshotEntry<K>(
+export function transformStateEntryToSnapshotEntry<K>(
   stateEntry: CRStructStateEntry<K>
 ): CRStructSnapshotEntry<K> {
   return {

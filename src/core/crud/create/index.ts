@@ -5,7 +5,7 @@ import type {
 } from '../../../.types/index.js'
 import { safeStructuredClone, prototype } from '@sovereignbase/utils'
 import { CRStructError } from '../../../.errors/class.js'
-import { parseSnapshotEntryToStateEntry } from '../../../.helpers/parseSnapshotEntryToStateEntry/index.js'
+import { transformSnapshotEntryToStateEntry } from '../../../.helpers/index.js'
 import { v7 as uuidv7 } from 'uuid'
 
 /**
@@ -53,7 +53,7 @@ export function __create<T extends Record<string, unknown>>(
   for (const key of Object.keys(defaults)) {
     const defaultValue = copiedDefaults[key as keyof T]
     if (snapshotIsObject && Object.hasOwn(snapshot, key)) {
-      const valid = parseSnapshotEntryToStateEntry(
+      const valid = transformSnapshotEntryToStateEntry(
         defaultValue,
         snapshot[key as keyof T]
       )
