@@ -28,6 +28,8 @@ export function __garbageCollect<T extends Record<string, unknown>>(
   const smallestAcknowledgementsPerKey: CRStructAck<T> = {}
 
   for (const frontier of frontiers) {
+    if (!frontier || typeof frontier !== 'object' || Array.isArray(frontier))
+      continue
     for (const [key, value] of Object.entries(frontier)) {
       if (!Object.hasOwn(crStructReplica.entries, key) || !isUuidV7(value))
         continue

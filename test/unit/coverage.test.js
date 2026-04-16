@@ -99,6 +99,7 @@ test('core merge and hostile raw inputs stay non-throwing and converge', () => {
 
   __garbageCollect(false, target)
   __garbageCollect([], target)
+  __garbageCollect([null, []], target)
 })
 
 test('empty struct instances preserve reflection events and serialization semantics', () => {

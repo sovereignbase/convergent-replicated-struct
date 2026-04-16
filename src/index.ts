@@ -4,9 +4,9 @@
 export { CRStruct } from './CRStruct/class.js'
 
 /**
- * The public CR-Struct error code union.
+ * The public CR-Struct error class and code union.
  */
-export type { CRStructErrorCode } from './.errors/class.js'
+export { CRStructError, type CRStructErrorCode } from './.errors/class.js'
 
 /**
  * Public CR-Struct types.

@@ -7,6 +7,10 @@
 
 Convergent Replicated Struct (CR-Struct), a delta CRDT for an fixed-key object structs.
 
+Read the specification:
+
+- https://sovereignbase.dev/convergent-replicated-struct
+
 ## Compatibility
 
 - Runtimes: Node >= 20, modern browsers, Bun, Deno, Cloudflare Workers, Edge Runtime.
@@ -371,12 +375,6 @@ What the current test suite covers:
 ```sh
 npm run bench
 ```
-
-The benchmark runner currently uses:
-
-- `HISTORY_DEPTH = 5_000`
-- `OPS = 250`
-- output columns: `group`, `scenario`, `n`, `ops`, `ms`, `ms/op`, `ops/sec`
 
 Last measured on Node `v22.14.0` (`win32 x64`):
 

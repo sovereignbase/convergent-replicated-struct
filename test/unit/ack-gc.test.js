@@ -46,6 +46,7 @@ test('garbageCollect ignores non-array empty and invalid frontier inputs', () =>
   replica.garbageCollect(false)
   replica.garbageCollect([])
   replica.garbageCollect([{ name: 'bad' }])
+  replica.garbageCollect([null, [], { name: 'bad' }])
 
   assert.deepEqual(readSnapshot(replica), before)
 })
