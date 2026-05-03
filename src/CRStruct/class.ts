@@ -347,7 +347,7 @@ export const CRStruct = CRStructRaw as {
 
   new <T extends Record<string, unknown>>(
     defaults: T,
-    snapshot: CRStructSnapshot<T> | undefined,
+    snapshot: Partial<CRStructSnapshot<T>> | undefined,
     allowMissing: true
   ): CRStruct<T, true>
 
