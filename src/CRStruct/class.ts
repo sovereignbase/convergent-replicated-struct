@@ -36,7 +36,7 @@ class CRStructRaw<T extends Record<string, unknown>> {
   constructor(
     defaults: T,
     snapshot?: CRStructSnapshot<T>,
-    allowMissing: boolean = false
+    allowMissing?: boolean
   ) {
     Object.defineProperties(this, {
       __state: {
@@ -341,13 +341,8 @@ export type CRStruct<
 export const CRStruct = CRStructRaw as {
   new <T extends Record<string, unknown>>(
     defaults: T,
-    snapshot?: CRStructSnapshot<T>
-  ): CRStruct<T, false>
-
-  new <T extends Record<string, unknown>>(
-    defaults: T,
-    snapshot: CRStructSnapshot<T> | undefined,
-    allowMissing: false
+    snapshot?: CRStructSnapshot<T>,
+    allowMissing?: false | undefined
   ): CRStruct<T, false>
 
   new <T extends Record<string, unknown>>(
@@ -356,9 +351,9 @@ export const CRStruct = CRStructRaw as {
     allowMissing: true
   ): CRStruct<T, true>
 
-  new <T extends Record<string, unknown>, AllowMissing extends boolean>(
+  new <T extends Record<string, unknown>>(
     defaults: T,
     snapshot: CRStructSnapshot<T> | undefined,
-    allowMissing: AllowMissing
-  ): CRStruct<T, AllowMissing>
+    allowMissing: boolean
+  ): CRStruct<T, boolean>
 }
