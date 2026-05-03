@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/sovereignbase/convergent-replicated-struct/compare/v1.2.0...v1.2.1) (2026-05-03)
+
+
+### Bug Fixes
+
+* allow partial snapshot when allowMissing is true ([402ec0e](https://github.com/sovereignbase/convergent-replicated-struct/commit/402ec0e7f7d73d85f89b03929f4f488f10753c7b))
+
 ## [1.2.0](https://github.com/sovereignbase/convergent-replicated-struct/compare/v1.1.5...v1.2.0) (2026-05-03)
 
 
